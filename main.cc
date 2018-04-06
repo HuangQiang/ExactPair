@@ -14,10 +14,10 @@ int main(int nargs, char **args)
 	string closest_set  = args[5];
 	string furthest_set = args[6];
 
-	printf("n = %d\n", n);
-	printf("d = %d\n", d);
-	printf("m = %d\n", m);
-	printf("dataset = %s\n", data_set.c_str());
+	printf("n    = %d\n", n);
+	printf("d    = %d\n", d);
+	printf("m    = %d\n", m);
+	printf("data = %s\n", data_set.c_str());
 	
 	ground_truth(n, d, m, data_set, closest_set, furthest_set);
 

@@ -31,9 +31,9 @@ int read_set(						// read high-dimensional data from disk
 
 // -----------------------------------------------------------------------------
 float update_closest_pair(			// update closest pairs results
-	int k,								// number of pair
-	Pair* p,							// new pair
-	Pair* pair)							// top-k pairs
+	int  k,								// number of pair
+	Pair *p,							// new pair
+	Pair *pair)							// top-k pairs
 {
 	int i = -1;
 	int pos = -1;
@@ -61,9 +61,9 @@ float update_closest_pair(			// update closest pairs results
 
 // ---------------------------------------------------------------------------------------
 float update_furthest_pair(			// update furthest pairs results
-	int k,								// number of pair
-	Pair* p,							// new pair
-	Pair* pair)							// top-k pairs
+	int  k,								// number of pair
+	Pair *p,							// new pair
+	Pair *pair)							// top-k pairs
 {
 	int i = -1;
 	int pos = -1;

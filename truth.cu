@@ -31,9 +31,10 @@ void ground_truth(					// ground truth of closest/furthest pairs
 	//  step 2: call kernel function
 	// -------------------------------------------------------------------------
 	gettimeofday(&start_time, NULL);
-	int k = MAXK;
-	Pair *closest_pair  = new Pair[k];
-	Pair *furthest_pair = new Pair[k];
+	int   k = MAXK;
+	float kernel_time = 0.0f;
+	Pair  *closest_pair  = new Pair[k];
+	Pair  *furthest_pair = new Pair[k];
 	
 	for (int i = 0; i < k; ++i) {
 		closest_pair[i].key = MAXREAL;
@@ -48,12 +49,17 @@ void ground_truth(					// ground truth of closest/furthest pairs
 	for (int i = 0; i < m; ++i) {
 		for (int j = i; j < m; ++j) {
 			partial_search(n, d, k, m, i, j, data, closest_pair, furthest_pair);
+
+			gettimeofday(&end_time, NULL);
+			kernel_time = end_time.tv_sec - start_time.tv_sec + 
+				(end_time.tv_usec - start_time.tv_usec) / 1000000.0f;
+			printf("Call Kernel Function: %f Seconds\n\n", kernel_time);
 		}
 	}
-	gettimeofday(&end_time, NULL);
-	float kernel_time = end_time.tv_sec - start_time.tv_sec + 
-		(end_time.tv_usec - start_time.tv_usec) / 1000000.0f;
-	printf("Call Kernel Function: %f Seconds\n\n", kernel_time);
+	// gettimeofday(&end_time, NULL);
+	// kernel_time = end_time.tv_sec - start_time.tv_sec + 
+	// 	(end_time.tv_usec - start_time.tv_usec) / 1000000.0f;
+	// printf("Call Kernel Function: %f Seconds\n\n", kernel_time);
 
 	// -------------------------------------------------------------------------
 	//  step 3: write the closest/furthest pairs ground truth results to disk
@@ -106,10 +112,7 @@ void partial_search(				// partial search
 	int base1 = id1 * num;
 	int base2 = id2 * num;
 
-	int data_size   = n1 * d;
-	int query_size  = n2 * d;
 	int result_size = n1 * (k + 1);
-
 	int num_threads = 1024;
 	int num_blocks  = (n1 + num_threads - 1) / num_threads;
 
@@ -117,7 +120,8 @@ void partial_search(				// partial search
 	printf("data size   = %d\n", data_size);
 	printf("query size  = %d\n", query_size);
 	printf("result size = %d\n", result_size);
-	printf("num threads = %d, num blocks  = %d\n\n", num_threads, num_blocks);
+	printf("num threads = %d\n", num_threads);
+	printf("num blocks  = %d\n", num_blocks);
 
 	// -------------------------------------------------------------------------
 	//  step 2: flatten and copy high-dimensional data
@@ -126,15 +130,16 @@ void partial_search(				// partial search
 	for (int j = base1; j < base1 + n1; ++j) {
 		tmp_data.insert(end(tmp_data), begin(data[j]), end(data[j]));
 	}
-	thrust::device_vector<float> d_data(data_size, 0.0f);
-	thrust::copy(&(tmp_data[0]), &(tmp_data[data_size]), d_data.begin());
 
 	vector<float> tmp_query;
 	for (int j = base2; j < base2 + n2; ++j) {
 		tmp_query.insert(end(tmp_query), begin(data[j]), end(data[j]));
 	}
-	thrust::device_vector<float> d_query(query_size, 0.0f);
-	thrust::copy(&(tmp_query[0]), &(tmp_query[query_size]), d_query.begin());
+	
+	// space: O(n1 * d)
+	thrust::device_vector<float> d_data(tmp_data.begin(), tmp_data.end());
+	// space: O(n2 * d)
+	thrust::device_vector<float> d_query(tmp_query.begin(), tmp_query.end());
 
 	thrust::device_vector<float> d_cp_dist(result_size, MAXREAL);
 	thrust::device_vector<int>   d_cp_index(result_size, -1);
@@ -156,7 +161,7 @@ void partial_search(				// partial search
 	cudaDeviceSynchronize();
 
 	// -------------------------------------------------------------------------
-	//  step 3: update closest/furthest pair results from GPU to CPU
+	//  step 4: update closest/furthest pair results from GPU to CPU
 	// -------------------------------------------------------------------------
 	thrust::host_vector<float> h_cp_dist  = d_cp_dist;
 	thrust::host_vector<int>   h_cp_index = d_cp_index;
@@ -172,7 +177,7 @@ void partial_search(				// partial search
 		int base = i * (k + 1);
 
 		// ---------------------------------------------------------------------
-		//  step 3.1: update closest pair results
+		//  step 4.1: update closest pair results
 		// ---------------------------------------------------------------------
 		for (int j = 0; j < k; ++j) {
 			float dist = h_cp_dist[base + j];
@@ -187,7 +192,7 @@ void partial_search(				// partial search
 		}
 
 		// ---------------------------------------------------------------------
-		//  step 3.2: update furthest pair results
+		//  step 4.2: update furthest pair results
 		// ---------------------------------------------------------------------
 		for (int j = 0; j < k; ++j) {
 			float dist = h_fp_dist[base + j];
@@ -201,6 +206,12 @@ void partial_search(				// partial search
 			else break;
 		}
 	}
+
+	// -------------------------------------------------------------------------
+	//  step 5: release memory
+	// -------------------------------------------------------------------------
+	tmp_data.clear(); tmp_data.shrink_to_fit();
+	tmp_query.clear(); tmp_query.shrink_to_fit();	
 }
 
 // -----------------------------------------------------------------------------
