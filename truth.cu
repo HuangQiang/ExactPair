@@ -112,11 +112,15 @@ void partial_search(				// partial search
 	int base1 = id1 * num;
 	int base2 = id2 * num;
 
+	int data_size   = n1 * d;
+	int query_size  = n2 * d;
 	int result_size = n1 * (k + 1);
 	int num_threads = 1024;
 	int num_blocks  = (n1 + num_threads - 1) / num_threads;
 
 	printf("(%d, %d):\n", id1 + 1, id2 + 1);
+	printf("n1          = %d\n", n1);
+	printf("n2          = %d\n", n2);
 	printf("data size   = %d\n", data_size);
 	printf("query size  = %d\n", query_size);
 	printf("result size = %d\n", result_size);
@@ -126,6 +130,7 @@ void partial_search(				// partial search
 	// -------------------------------------------------------------------------
 	//  step 2: flatten and copy high-dimensional data
 	// -------------------------------------------------------------------------
+	printf("flatten and copy.");
 	vector<float> tmp_data;
 	for (int j = base1; j < base1 + n1; ++j) {
 		tmp_data.insert(end(tmp_data), begin(data[j]), end(data[j]));
@@ -135,16 +140,20 @@ void partial_search(				// partial search
 	for (int j = base2; j < base2 + n2; ++j) {
 		tmp_query.insert(end(tmp_query), begin(data[j]), end(data[j]));
 	}
+	printf(".");
 	
-	// space: O(n1 * d)
+	// data  size = n1 * d
 	thrust::device_vector<float> d_data(tmp_data.begin(), tmp_data.end());
-	// space: O(n2 * d)
+	printf(".");
+	// query size = n2 * d
 	thrust::device_vector<float> d_query(tmp_query.begin(), tmp_query.end());
 
 	thrust::device_vector<float> d_cp_dist(result_size, MAXREAL);
 	thrust::device_vector<int>   d_cp_index(result_size, -1);
 	thrust::device_vector<float> d_fp_dist(result_size, MINREAL);
 	thrust::device_vector<int>   d_fp_index(result_size, -1);
+	printf(".\n");
+	
 
 	// -------------------------------------------------------------------------
 	//  step 3: call kernel function
@@ -205,6 +214,7 @@ void partial_search(				// partial search
 			}
 			else break;
 		}
+		if ((i + 1) % 100 == 0) printf("%d out of %d\n", i + 1, n1);
 	}
 
 	// -------------------------------------------------------------------------

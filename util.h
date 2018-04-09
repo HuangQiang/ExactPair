@@ -30,7 +30,7 @@ float update_closest_pair(			// update closest pairs results
 	Pair *p,							// new pair
 	Pair *pair);						// top-k pairs
 
-// ---------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 float update_furthest_pair(			// update furthest pairs results
 	int  k,								// number of pairs
 	Pair *p,							// new pair
