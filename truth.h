@@ -5,9 +5,9 @@ struct Pair;
 
 // -----------------------------------------------------------------------------
 void ground_truth(					// ground truth of closest/furthest pairs
-	int    n,							// cardinality
-	int    d,							// dimensionality
-	int    m,							// number of division
+	int n,								// cardinality
+	int d,								// dimensionality
+	int m,								// number of division
 	string data_set,					// file name of data set
 	string closest_set,					// file name of closest set
 	string furthest_set);				// file name of furthest set
@@ -26,17 +26,11 @@ void partial_search(				// partial search
 
 // -----------------------------------------------------------------------------
 __global__ void euclidean(			// compute Euclidean distance
-	int   n,							// cardinality of data
-	int   qn,							// cardinality of query
-	int   d,							// dimensionality
-	int   k,							// top-k value
-	int   base1,						// start position of data 
-	int   base2,						// start position of query
+	int n,								// cardinality of data
+	int qn,								// cardinality of query
+	int d,								// dimensionality
 	float *data,						// data objects
 	float *query,						// query objects
-	float *cp_dist, 					// closest distance (return)
-	int   *cp_index,					// closest index (return)
-	float *fp_dist,						// furthest distance (return)
-	int   *fp_index);					// furthest index (return)
+	float *results); 					// all-pair results (return)
 	
 #endif // __TRUTH_H

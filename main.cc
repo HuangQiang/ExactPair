@@ -8,11 +8,11 @@ int main(int nargs, char **args)
 
 	int n = atoi(args[1]);
 	int d = atoi(args[2]);
-	int m = atoi(args[3]);
+	int m = (int) ceil((float) n / sqrt(1024.0f * 65535.0f));
 
-	string data_set     = args[4];
-	string closest_set  = args[5];
-	string furthest_set = args[6];
+	string data_set     = args[3];
+	string closest_set  = args[4];
+	string furthest_set = args[5];
 
 	printf("n    = %d\n", n);
 	printf("d    = %d\n", d);
