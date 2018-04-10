@@ -97,8 +97,7 @@ void partial_search(				// partial search
 {
 	// -------------------------------------------------------------------------
 	//  step 1: init parameters
-	//  two conditions: num_threads <= 1024
-	//                  num_blocks  <= 65535
+	//  two conditions: num_threads <= 1024 & num_blocks <= 65535
 	// -------------------------------------------------------------------------
 	int num = (n + m - 1) / m;
 
@@ -111,7 +110,7 @@ void partial_search(				// partial search
 	int base2 = id2 * num;
 
 	int result_size = n1 * n2;
-	int num_threads = 1024; 		// TODO: 
+	int num_threads = 1024;
 	int num_blocks  = (result_size + num_threads - 1) / num_threads;
 
 	printf("(%d, %d):\n", id1 + 1, id2 + 1);
@@ -162,7 +161,7 @@ void partial_search(				// partial search
 
 	for (int i = 0; i < n1; ++i) {
 		// ---------------------------------------------------------------------
-		//  step 3.1: get all-pairs results
+		//  step 4.1: get all-pairs results
 		// ---------------------------------------------------------------------
 		int base = i * n2;
 		for (int j = 0; j < n2; ++j) {
@@ -173,13 +172,13 @@ void partial_search(				// partial search
 		}
 
 		// ---------------------------------------------------------------------
-		//  step 3.2: sort results by dist (ascending order)
+		//  step 4.2: sort results by dist (ascending order)
 		// ---------------------------------------------------------------------
 		thrust::sort_by_key(h_one_results.begin(), h_one_results.end(), 
 			h_one_ids.begin());
 
 		// ---------------------------------------------------------------------
-		//  step 4.1: update closest pair results
+		//  step 4.3: update closest-pair results
 		// ---------------------------------------------------------------------
 		int size = min(n2 - 1, k);
 		for (int j = 0; j <= size; ++j) {
@@ -201,7 +200,7 @@ void partial_search(				// partial search
 		}
 
 		// ---------------------------------------------------------------------
-		//  step 4.2: update furthest pair results
+		//  step 4.4: update furthest-pair results
 		// ---------------------------------------------------------------------
 		size = min(n2, k);
 		for (int j = 0; j < size; ++j) {
