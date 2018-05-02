@@ -1,4 +1,4 @@
-# Pairs_Truth：Find the Ground Truth for Closest/Furthest Pairs
+# Pairs_Truth：Ground Truth for Closest / Furthest Pairs
 
 Version: 1.0.0
 
