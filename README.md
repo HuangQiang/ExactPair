@@ -16,10 +16,10 @@ search using GPU.
 Usage
 --------
 
-We provide a Makefile and a shell script (i.e., run_mnist.sh) as a running 
-example for comipling and running the package. Before running this package, 
-please ensure the input format of the dataset is correct. We give a sample 
-dataset (i.e., OptDigits) for your reference.
+We share a Makefile and a shell script (i.e., run.sh) as a running example 
+for comipling and running the package. Before running this package, please 
+install cuda 8.0 or higher version. We also give a sample dataset (i.e., 
+OptDigits.data) for your reference to organize the input format of datasets.
 
 
 Authors
