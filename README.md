@@ -19,7 +19,7 @@ Usage
 We provide a Makefile and a shell script (i.e., run_mnist.sh) as a running 
 example for comipling and running the package. Before running this package, 
 please ensure the input format of the dataset is correct. We give a sample 
-dataset (i.e., Mnist) for your reference.
+dataset (i.e., OptDigits) for your reference.
 
 
 Authors
