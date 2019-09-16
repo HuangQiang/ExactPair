@@ -2,7 +2,9 @@
 
 Version: 1.0.0
 
-Release date:  03-04-2017
+Release  Date: 03-04-2018
+
+Modified Date: 17-09-2019
 
 
 Introduction
@@ -27,11 +29,11 @@ Authors
 
 * **Qiang Huang**
 
-  Smart Systems Institute, National University of Singapore (NUS),
+  School of Computing, National University of Singapore (NUS),
   
   Singapore, 119613 
   
-  huangq2011@gmail.com, huangq25@mail2.sysu.edu.cn
+  huangq2011@gmail.com, huangq@comp.nus.edu.sg
   
   https://sites.google.com/site/qianghuang2017/
   
