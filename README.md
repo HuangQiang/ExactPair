@@ -1,39 +1,25 @@
-# Pairs_Truth：Ground Truth for Closest / Furthest Pairs
+# Pairs_Truth：Ground Truth for Closest/Furthest Pairs
 
-Version: 1.0.1
+## Introduction
 
-Release  Date: 03-04-2018
+This package provides a parallel program to find the ground truth of closest/furthest pairs search using GPU. 
 
-Modified Date: 17-09-2019
+## Compilation
 
+The package requires at least ```cuda 8.0``` and  ```g++ with c++11``` support. To download and compile the code, type:
 
-Introduction
---------
+```bash
+$ git clone https://github.com/HuangQiang/Pairs_Truth.git
+$ cd Pairs_Truth
+$ make
+```
 
-This package is written in the C++/CUDA programming language. It contains 
-a parallel program to find the ground truth for the closest/furthest pairs 
-search using GPU. 
+## Run Example
 
+We provide a script ```run.sh``` to find the closest/furthest pairs of datasets. A quick example is shown as follows (find closest and furthest pairs on ```OptDigits.data```):
 
-Usage
---------
+```bash
+./truth 3823 64 OptDigits.data OptDigits.cp2.0 OptDigits.fp2.0
+```
 
-We share a Makefile and a shell script (i.e., run.sh) as a running example 
-for comipling and running the package. Before running this package, please 
-install cuda 8.0 or higher version. We also give a sample dataset (i.e., 
-OptDigits.data) for your reference to organize the input format of datasets.
-
-
-Authors
---------
-
-* **Qiang Huang**
-
-  School of Computing, National University of Singapore (NUS),
-  
-  Singapore, 119613 
-  
-  huangq2011@gmail.com, huangq@comp.nus.edu.sg
-  
-  https://sites.google.com/site/qianghuang2017/
-  
+where `3823` is the `cardinality` of OptDigits.data and ``64`` is ``dimensionality`` of OptDigits.data.
