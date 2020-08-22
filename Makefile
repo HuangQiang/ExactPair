@@ -1,20 +1,16 @@
-SRCS=util.cc truth.cu main.cc
-OBJS=$(SRCS:.cc=.o)
+# ------------------------------------------------------------------------------
+#  makefile with cuda
+# ------------------------------------------------------------------------------
+ALLOBJFILES = util.o truth.o main.o
 
-CXX=nvcc -std=c++11
-CXXFLAGS=-g -Xcompiler -fopenmp -w -O3
-CXXFLAGS+=$(FLAGS) -Wno-deprecated-gpu-targets
+all:${ALLOBJFILES}
+	nvcc -std=c++11 -w -O3 -o truth -lm -lcudart -lcublas ${ALLOBJFILES}
 
-.PHONY: clean
+%.o: %.cu 
+	nvcc -std=c++11 -c -w -O3 -o $@ $<
 
-all: ${OBJS}
-	${CXX} ${CXXFLAGS} -o truth ${OBJS}
-
-util.o: util.h 
-
-truth.o: truth.h
-
-main.o:
+%.o: %.cc 
+	nvcc -std=c++11 -c -w -O3 -o $@ $<
 
 clean:
-	-rm ${OBJS}
+	-rm *.o truth

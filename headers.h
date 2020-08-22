@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <errno.h>
-
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -13,6 +10,13 @@
 #include <limits>
 #include <string>
 #include <vector>
+
+#include <ctype.h>
+#include <errno.h>
+#include <unistd.h>
+#include <stdarg.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/time.h>
 
 #include <cuda_runtime.h>
@@ -24,9 +28,5 @@
 #include <thrust/copy.h>
 #include <thrust/sort.h>
 
-#include "def.h"
 #include "util.h"
 #include "truth.h"
-
-using namespace std;
-
